@@ -56,29 +56,33 @@ def parse_arguments():
                         help="name of directory on which to save the logs, under logs/save_dir")
     
     args = parser.parse_args()
-    
-    if args.dataset_folder == None:
-        try:
-            args.dataset_folder = os.environ['SF_XL_PROCESSED_FOLDER']
-        except KeyError:
-            raise Exception("You should set parameter --dataset_folder or export " +
-                            "the SF_XL_PROCESSED_FOLDER environment variable as such \n" +
-                            "export SF_XL_PROCESSED_FOLDER=/path/to/sf_xl/processed")
-    
-    if not os.path.exists(args.dataset_folder):
-        raise FileNotFoundError(f"Folder {args.dataset_folder} does not exist")
-    
-    args.train_set_folder = os.path.join(args.dataset_folder, "train")
-    if not os.path.exists(args.train_set_folder):
-        raise FileNotFoundError(f"Folder {args.train_set_folder} does not exist")
-    
-    args.val_set_folder = os.path.join(args.dataset_folder, "val")
-    if not os.path.exists(args.val_set_folder):
-        raise FileNotFoundError(f"Folder {args.val_set_folder} does not exist")
-    
-    args.test_set_folder = os.path.join(args.dataset_folder, "test")
-    if not os.path.exists(args.test_set_folder):
-        raise FileNotFoundError(f"Folder {args.test_set_folder} does not exist")
+    args.dataset_folder = "/content/drive/MyDrive/small/"
+    args.train_set_folder = "/content/drive/MyDrive/small/train/"
+    args.val_set_folder = "/content/drive/MyDrive/small/val/"
+    args.test_set_folder = "/content/drive/MyDrive/small/test/"
+    args.groups_num = 1
+    # if args.dataset_folder == None:
+    #     try:
+    #         args.dataset_folder = os.environ['SF_XL_PROCESSED_FOLDER']
+    #     except KeyError:
+    #         raise Exception("You should set parameter --dataset_folder or export " +
+    #                         "the SF_XL_PROCESSED_FOLDER environment variable as such \n" +
+    #                         "export SF_XL_PROCESSED_FOLDER=/path/to/sf_xl/processed")
+    #
+    # if not os.path.exists(args.dataset_folder):
+    #     raise FileNotFoundError(f"Folder {args.dataset_folder} does not exist")
+    #
+    # args.train_set_folder = os.path.join(args.dataset_folder, "train")
+    # if not os.path.exists(args.train_set_folder):
+    #     raise FileNotFoundError(f"Folder {args.train_set_folder} does not exist")
+    #
+    # args.val_set_folder = os.path.join(args.dataset_folder, "val")
+    # if not os.path.exists(args.val_set_folder):
+    #     raise FileNotFoundError(f"Folder {args.val_set_folder} does not exist")
+    #
+    # args.test_set_folder = os.path.join(args.dataset_folder, "test")
+    # if not os.path.exists(args.test_set_folder):
+    #     raise FileNotFoundError(f"Folder {args.test_set_folder} does not exist")
     
     return args
 
