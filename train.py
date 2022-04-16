@@ -58,8 +58,14 @@ logging.info(f"The {len(groups)} groups have respectively the following number o
 val_ds = TestDataset(args.val_set_folder, positive_dist_threshold=args.positive_dist_threshold)
 test_ds = TestDataset(args.test_set_folder, queries_folder="queries_v1",
                       positive_dist_threshold=args.positive_dist_threshold)
+test_ds_tokyo = TestDataset("/content/drive/MyDrive/tokyo_xs/test/",positive_dist_threshold=args.positive_dist_threshold)
+test_ds_tokyo_night = TestDataset("/content/drive/MyDrive/tokyo_night/test/", positive_dist_threshold=args.positive_dist_threshold)
+
 logging.info(f"Validation set: {val_ds}")
 logging.info(f"Test set: {test_ds}")
+logging.info(f"Test set: {test_ds_tokyo}")
+logging.info(f"Test set: {test_ds_tokyo_night}")
+
 
 #### Resume
 if args.resume_train:
@@ -172,5 +178,16 @@ logging.info(f"Now testing on the test set: {test_ds}")
 recalls, recalls_str = test.test(args, test_ds, model)
 logging.info(f"{test_ds}: {recalls_str[:20]}")
 
+logging.info(f"Now testing on the test set: {test_ds_tokyo}")
+recalls1, recalls_str1 = test.test(args, test_ds_tokyo, model)
+logging.info(f"{test_ds_tokyo}: {recalls_str1[:20]}")
+
+logging.info(f"Now testing on the test set: {test_ds_tokyo_night}")
+recalls2, recalls_str2 = test.test(args, test_ds_tokyo_night, model)
+logging.info(f"{test_ds_tokyo_night}: {recalls_str2[:20]}")
+
 logging.info("Experiment finished (without any errors)")
 
+print("my recall is:",recalls)
+print("my recall is:",recalls1)
+print("my recall is:",recalls2)
