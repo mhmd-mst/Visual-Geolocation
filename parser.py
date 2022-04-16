@@ -61,6 +61,8 @@ def parse_arguments():
     args.val_set_folder = "/content/drive/MyDrive/small/val/"
     args.test_set_folder = "/content/drive/MyDrive/small/test/"
     args.groups_num = 1
+    args.num_workers = 2
+    args.epochs_num = 10
     # if args.dataset_folder == None:
     #     try:
     #         args.dataset_folder = os.environ['SF_XL_PROCESSED_FOLDER']
