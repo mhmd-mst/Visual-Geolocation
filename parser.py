@@ -56,13 +56,13 @@ def parse_arguments():
                         help="name of directory on which to save the logs, under logs/save_dir")
     
     args = parser.parse_args()
-    args.dataset_folder = "/content/drive/MyDrive/small/"
-    args.train_set_folder = "/content/drive/MyDrive/small/train/"
-    args.val_set_folder = "/content/drive/MyDrive/small/val/"
-    args.test_set_folder = "/content/drive/MyDrive/small/test/"
+    args.dataset_folder = "/content/small/"
+    args.train_set_folder = "/content/small/train/"
+    args.val_set_folder = "/content/small/val/"
+    args.test_set_folder = "/content/small/test/"
     args.groups_num = 1
     args.num_workers = 2
-    args.epochs_num = 10
+    args.epochs_num = 5
     # if args.dataset_folder == None:
     #     try:
     #         args.dataset_folder = os.environ['SF_XL_PROCESSED_FOLDER']
