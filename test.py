@@ -12,7 +12,7 @@ from sklearn.neighbors import NearestNeighbors
 def test(args, eval_ds, model, rerank=False):
     """Compute descriptors of the given dataset and compute the recalls."""
 
-    model = model.to(args.device).eval()
+    model = model.eval()
     with torch.no_grad():
         logging.debug("Extracting database descriptors for evaluation/testing")
         database_subset_ds = Subset(eval_ds, list(range(eval_ds.database_num)))
