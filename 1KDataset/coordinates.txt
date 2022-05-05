@@ -1,0 +1,48 @@
+X --min_lat 37.8 --max_lat 37.82 --min_lon -122.53 --max_lon -122.5 
+X --min_lat 37.8 --max_lat 37.82 --min_lon -122.5 --max_lon -122.48 
+X --min_lat 37.8 --max_lat 37.82 --min_lon -122.48 --max_lon -122.46
+X--min_lat 37.8 --max_lat 37.82 --min_lon -122.46 --max_lon -122.43 
+--min_lat 37.8 --max_lat 37.82 --min_lon -122.43 --max_lon -122.4 
+--min_lat 37.8 --max_lat 37.82 --min_lon -122.4 --max_lon -122.37 
+--min_lat 37.8 --max_lat 37.82 --min_lon -122.37 --max_lon -122.35 
+
+--min_lat 37.78 --max_lat 37.8 --min_lon -122.53 --max_lon -122.5 
+--min_lat 37.78 --max_lat 37.8 --min_lon -122.5 --max_lon -122.48 
+--min_lat 37.78 --max_lat 37.8 --min_lon -122.48 --max_lon -122.46 
+
+--min_lat 37.78 --max_lat 37.8 --min_lon -122.4 --max_lon -122.37 
+--min_lat 37.78 --max_lat 37.8 --min_lon -122.37 --max_lon -122.35 
+
+--min_lat 37.76 --max_lat 37.78 --min_lon -122.53 --max_lon -122.5 
+--min_lat 37.76 --max_lat 37.78 --min_lon -122.5 --max_lon -122.48 
+--min_lat 37.76 --max_lat 37.78 --min_lon -122.48 --max_lon -122.46 
+
+--min_lat 37.76 --max_lat 37.78 --min_lon -122.4 --max_lon -122.37 
+--min_lat 37.76 --max_lat 37.78 --min_lon -122.37 --max_lon -122.35 
+
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.53 --max_lon -122.5 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.5 --max_lon -122.48 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.48 --max_lon -122.46 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.46 --max_lon -122.43 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.43 --max_lon -122.4 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.4 --max_lon -122.37 
+--min_lat 37.75 --max_lat 37.76 --min_lon -122.37 --max_lon -122.35 
+
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.53 --max_lon -122.5 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.5 --max_lon -122.48 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.48 --max_lon -122.46 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.46 --max_lon -122.43 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.43 --max_lon -122.4 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.4 --max_lon -122.37 
+--min_lat 37.73 --max_lat 37.75 --min_lon -122.37 --max_lon -122.35 
+
+X /bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.53 --max_lon -122.5 
+X /bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.5 --max_lon -122.48 
+X /bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.48 --max_lon -122.46 
+X /bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.46 --max_lon -122.43 
+/bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.43 --max_lon -122.4 
+/bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.4 --max_lon -122.37 
+/bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.8 --max_lat 37.82 --min_lon -122.43 --max_lon -122.4 
+/bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.8 --max_lat 37.82 --min_lon -122.4 --max_lon -122.37 
+/bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.8 --max_lat 37.82 --min_lon -122.37 --max_lon -122.35 
+X /bin/python3 /home/hajali/Desktop/DS/MLDL/Visual-Geolocation/1KDataset/download_flickr.py --min_lat 37.7 --max_lat 37.73 --min_lon -122.37 --max_lon -122.35 
