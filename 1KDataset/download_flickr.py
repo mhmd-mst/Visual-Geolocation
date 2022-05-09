@@ -123,12 +123,12 @@ parser.add_argument("--output_folder", type=str, default="outputs",
                     help="Folder where to save logs and maps")
 
 args = parser.parse_args()
-args.output_folder = (f"{args.output_folder}/" +
+args.output_folder = (f"1KDataset/{args.output_folder}/" +
                       f"{args.min_lat}_{args.max_lat}_{args.min_lon}_{args.max_lon}")
-flickr_folder = f"{args.output_folder}/flickr"
+flickr_folder = f"1KDataset/{args.output_folder}/flickr"
 print(" ".join(sys.argv))
 print(args)
-images_folder = f"{args.output_folder}/flickr/images"
+images_folder = f"1KDataset/{args.output_folder}/flickr/images"
 os.makedirs(images_folder, exist_ok=True)
 
 manager = multiprocessing.Manager()
@@ -161,7 +161,7 @@ def download_flickr_ids(process_num, processes_num, all_lats_lons_sublist, flick
         search_flickr_ids_in_bbox(flickr_ids, lat, lon, side_len)
 
 try:
-    torch.load(f"{flickr_folder}/flickr_ids.torch")
+    flickr_ids = torch.load(f"{flickr_folder}/flickr_ids.torch")
 except:
 
     # It is necessary to query small areas (i.e. with short side_len), because flickr's APIs have bugs.
@@ -186,8 +186,8 @@ except:
 
     flickr_ids = sorted(list(flickr_ids.keys()))
     torch.save(flickr_ids, f"{flickr_folder}/flickr_ids.torch")
-else:
-    flickr_ids = torch.load(f"{flickr_folder}/flickr_ids.torch")
+
+    # flickr_ids = torch.load(f"{flickr_folder}/flickr_ids.torch")
 
 print(f"I found {len(flickr_ids)} IDs (aka photos) in this area")
 
@@ -217,12 +217,15 @@ def download_images_metadata(process_num, processes_num, flickr_ids_sublist, dic
             print(f"flickr_id: {flickr_id}, i: {i}, Exception: {e}")
             print("traceback: " + traceback.format_exc())
 
-dict__flickr_id__info = manager.dict()
+try:
+    dict__flickr_id__info = torch.load(f"{flickr_folder}/dict__flickr_id__info.torch")
+except:
+    dict__flickr_id__info = manager.dict()
 
-parallelize_function(args.processes_num, download_images_metadata, flickr_ids, dict__flickr_id__info)
+    parallelize_function(args.processes_num, download_images_metadata, flickr_ids, dict__flickr_id__info)
 
-dict__flickr_id__info = dict__flickr_id__info.copy()
-torch.save(dict__flickr_id__info, f"{flickr_folder}/dict__flickr_id__info.torch")
+    dict__flickr_id__info = dict__flickr_id__info.copy()
+    torch.save(dict__flickr_id__info, f"{flickr_folder}/dict__flickr_id__info.torch")
 
 
 #### Finally download the images, saving the coordinates and the flickr_id in the name.
