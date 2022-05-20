@@ -8,12 +8,19 @@ from tkinter import ttk
 from pathlib import Path
 import shutil
 import os
+import argparse
+
 # from PIL import Image
 from PIL import ImageTk, Image
 
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("--input_folder", default='1KDataset/night/TEST', required=False)
+parser.add_argument("--output_folder", default='1KDataset/night/OK', required=False)
+args = parser.parse_args()
+
 
 class App(Tk):
-    def __init__(self, files, driver):
+    def __init__(self, files, driver, src_pth, dst_pth):
         super().__init__()
 
         self.name = None
@@ -21,8 +28,8 @@ class App(Tk):
 
         self.names = [n.split('@')[5] + ', ' + n.split('@')[6] for n in files]
         self.files = files
-        self.src_pth = '1KDataset/night/TEST'
-        self.dst_pth = '1KDataset/night/OK'
+        self.src_pth = src_pth
+        self.dst_pth = dst_pth
 
         # configure the root window
         self.title('My Awesome App')
@@ -108,10 +115,10 @@ class App(Tk):
         self.draw_img(self.file, self.name)
 
 
-files = os.listdir('./1KDataset/night/TEST')
+files = os.listdir(args.input_folder)
 files_test = files[:3]
 
-driver = webdriver.Chrome(service=Service(f"{os.getcwd()}/1KDataset/chromedriver100"))
+driver = webdriver.Chrome(service=Service("1KDataset/chromedriver100"))
 
-app = App(files_test, driver)
+app = App(files_test, driver, args.input_folder, args.output_folder)
 app.mainloop()
