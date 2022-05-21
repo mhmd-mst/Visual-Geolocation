@@ -16,11 +16,12 @@ from PIL import ImageTk, Image
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--input_folder", default='1KDataset/night/TEST', required=False)
 parser.add_argument("--output_folder", default='1KDataset/night/OK', required=False)
+parser.add_argument("--remove_folder", default='1KDataset/night/REMOVE', required=False)
 args = parser.parse_args()
 
 
 class App(Tk):
-    def __init__(self, files, driver, src_pth, dst_pth):
+    def __init__(self, files, driver, src_pth, dst_pth, rm_pth):
         super().__init__()
 
         self.name = None
@@ -30,6 +31,7 @@ class App(Tk):
         self.files = files
         self.src_pth = src_pth
         self.dst_pth = dst_pth
+        self.rm_pth = rm_pth
 
         # configure the root window
         self.title('My Awesome App')
@@ -58,6 +60,11 @@ class App(Tk):
         self.button_ok = ttk.Button(self.frame_btn, text='\nOk\n')
         self.button_ok['command'] = self.button_ok_clicked
         self.button_ok.pack(pady=8)
+
+        # button_remove
+        self.button_remove = ttk.Button(self.frame_btn, text='\nRemove\n')
+        self.button_remove['command'] = self.button_remove_clicked
+        self.button_remove.pack()
 
         # Selenium
         self.driver = driver
@@ -88,8 +95,6 @@ class App(Tk):
         self.draw_img(self.file, self.name)
 
     def button_ok_clicked(self):
-        # TODO: OK BUTTON PRESSED
-
         url = self.driver.current_url
         print(url)
         # @40.409192,49.866289,xxxxxxx
@@ -114,11 +119,25 @@ class App(Tk):
 
         self.draw_img(self.file, self.name)
 
+    def button_remove_clicked(self):
+
+        src_file = os.path.join(self.src_pth, self.file)
+        #         self.file.replace(org_lat_lon, lat_lon)
+        rm_file = os.path.join(self.rm_pth, self.file)
+
+        Path(self.rm_pth).mkdir(exist_ok=True)
+        shutil.move(src_file, rm_file)
+        
+        self.name = self.names.pop()
+        self.file = self.files.pop()
+        self.title(self.name)
+
+        self.draw_img(self.file, self.name)
 
 files = os.listdir(args.input_folder)
 files_test = files[:3]
 
 driver = webdriver.Chrome(service=Service("1KDataset/chromedriver100"))
 
-app = App(files_test, driver, args.input_folder, args.output_folder)
+app = App(files_test, driver, args.input_folder, args.output_folder, args.remove_folder)
 app.mainloop()
