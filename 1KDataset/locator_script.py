@@ -14,10 +14,14 @@ import argparse
 from PIL import ImageTk, Image
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--input_folder", default='1KDataset/night/TEST', required=False)
-parser.add_argument("--output_folder", default='1KDataset/night/OK', required=False)
-parser.add_argument("--remove_folder", default='1KDataset/night/REMOVE', required=False)
+parser.add_argument("--input_folder", default='TEST', required=False)
+parser.add_argument("--output_folder", default='OK', required=False)
+parser.add_argument("--remove_folder", default='REMOVE', required=False)
 args = parser.parse_args()
+
+os.makedirs(args.input_folder, exist_ok=True)
+os.makedirs(args.output_folder, exist_ok=True)
+os.makedirs(args.remove_folder, exist_ok=True)
 
 
 class App(Tk):
@@ -109,7 +113,6 @@ class App(Tk):
         #         self.file.replace(org_lat_lon, lat_lon)
         dst_file = os.path.join(self.dst_pth, self.file)
 
-        Path(self.dst_pth).mkdir(exist_ok=True)
         shutil.move(src_file, dst_file)
         os.rename(dst_file, dst_file.replace(org_lat_lon, lat_lon))
 
@@ -136,8 +139,10 @@ class App(Tk):
 
 files = os.listdir(args.input_folder)
 files_test = files[:3]
+print(files_test)
 
-driver = webdriver.Chrome(service=Service("1KDataset/chromedriver100"))
+
+driver = webdriver.Chrome(service=Service("../chromedriver100"))
 
 app = App(files_test, driver, args.input_folder, args.output_folder, args.remove_folder)
 app.mainloop()
