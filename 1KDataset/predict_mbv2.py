@@ -92,8 +92,8 @@ def predict():
                     if is_day < 0.25:
                         # print('Night image founded!')
                         _ = shutil.move(image_path, f"{args.output_folder}/night/{image_name}")
-                    # else:
-                    #     _ = shutil.move(image_path, f"{args.output_folder}/day/{image_name}")
+                    else:
+                        _ = shutil.move(image_path, f"{args.output_folder}/day/{image_name}")
 
 
 if __name__ == '__main__':
