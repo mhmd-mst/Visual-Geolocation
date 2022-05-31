@@ -6,5 +6,5 @@ outputs
 .@*
 data
 .idea
-1KDataset/night/Olds*
+1KDataset/night/*
 venv

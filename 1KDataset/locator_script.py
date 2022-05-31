@@ -14,7 +14,7 @@ import argparse
 from PIL import ImageTk, Image
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--input_folder", default='TEST', required=False)
+parser.add_argument('-i', "--input_folder", default='night_H', required=False)
 parser.add_argument("--output_folder", default='OK', required=False)
 parser.add_argument("--remove_folder", default='REMOVE', required=False)
 args = parser.parse_args()
@@ -138,11 +138,11 @@ class App(Tk):
         self.draw_img(self.file, self.name)
 
 files = os.listdir(args.input_folder)
-files_test = files[:3]
-print(files_test)
+# files_test = files[:3]
+# print(files_test)
 
 
 driver = webdriver.Chrome(service=Service("../chromedriver100"))
 
-app = App(files_test, driver, args.input_folder, args.output_folder, args.remove_folder)
+app = App(files, driver, args.input_folder, args.output_folder, args.remove_folder)
 app.mainloop()
