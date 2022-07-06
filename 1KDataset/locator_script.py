@@ -14,7 +14,7 @@ import argparse
 from PIL import ImageTk, Image
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('-i', "--input_folder", default='night_H', required=False)
+parser.add_argument('-i', "--input_folder", default='night_second_News', required=False)
 parser.add_argument("--output_folder", default='OK', required=False)
 parser.add_argument("--remove_folder", default='REMOVE', required=False)
 args = parser.parse_args()
@@ -142,7 +142,7 @@ files = os.listdir(args.input_folder)
 # print(files_test)
 
 
-driver = webdriver.Chrome(service=Service("../chromedriver100"))
+driver = webdriver.Chrome(service=Service("../chromedriver"))
 
 app = App(files, driver, args.input_folder, args.output_folder, args.remove_folder)
 app.mainloop()
