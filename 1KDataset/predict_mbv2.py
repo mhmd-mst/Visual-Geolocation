@@ -52,7 +52,7 @@ def predict():
     ])
     # Put threshold to outdoor pics (only first 4 folders {0, 1, 2, 3})
     
-    for i in range(int(args.outdoor_threshold)):
+    for i in range(0, int(args.outdoor_threshold)):
         # images_folder = args.folder
         print(f"Folder {i}")
         images_folder = (f"{args.output_folder}/Sorted/{args.input_folder}/{i}")

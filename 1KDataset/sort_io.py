@@ -57,9 +57,9 @@ data_transforms = transforms.Compose([
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=2)
 # gdd.download_file_from_google_drive(file_id="1XHGEY234JVvf-UKrxw-u4kCcxFmFx-Xo",
-#                                     dest_path="1KDataset/data/sd_e0_in_out.torch")
+#                                     dest_path="1KDataset/models/sd_e0_in_out.torch")
 
-model.load_state_dict(torch.load("1KDataset/data/sd_e0_in_out.torch", map_location="cpu"))
+model.load_state_dict(torch.load("1KDataset/models/sd_e0_in_out.torch", map_location="cpu"))
 model = torch.nn.DataParallel(model.to(device).eval())
 
 print(f"Sorted Images Folder {sorted_images_folder}")
