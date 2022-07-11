@@ -1,4 +1,71 @@
 
+
+<details open>
+  <summary><strong>pix2pix</strong></summary>
+  
+Clone repo and install required libraries:
+```bash
+$ git clone https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+$ cd pytorch-CycleGAN-and-pix2pix
+$ pip install -r requirements.txt
+```
+## <div align="center">Dataset</div>
+
+Download night2day dataset from the repo:
+```bash
+$ bash ./datasets/download_pix2pix_dataset.sh night2day
+```
+If you want to create your own dataset, create folder /path/to/data with subdirectories A and B. A and B should each have their own subdirectories train, val, test, etc. In /path/to/data/A/train, put training images in style A. In /path/to/data/B/train, put the corresponding images in style B. Repeat same for other data splits (val, test, etc).
+
+Corresponding images in a pair {A,B} must be the same size and have the same filename, e.g., /path/to/data/A/train/1.jpg is considered to correspond to /path/to/data/B/train/1.jpg.
+
+Once the data is formatted this way, call:
+```bash
+$ python datasets/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/data/B --fold_AB /path/to/data
+```
+This will combine each pair of images (A,B) into a single image file, ready for training.
+## <div align="center">Train</div>
+
+
+To train run: 
+
+```bash
+$ python train.py --dataroot ./datasets/night2day --name day2night --model pix2pix --direction BtoA --batch_size 32 --n_epochs 75 --n_epochs_decay 75
+```
+For further arguments' configurations and information refer to `options/base_options.py` and `options/train_options.py`.
+
+To resume training add `--continue_train` and set `--checkpoints_dir` to the saved models' path and change `epoch_count` to the epoch you want to resume from.
+
+## <div align="center">Testing</div>
+
+To test images, make sure you have paired images (refer to **Dataset** Section), so if you are using your own dataset
+```bash
+$ python test.py --dataroot ./datasets/ --name day2night --model pix2pix --direction BtoA --checkpoints_dir /content/drive/MyDrive/pix2pix
+```
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Rethinking Visual Geo-localization for Large-Scale Applications
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-pittsburgh-250k)](https://paperswithcode.com/sota/visual-place-recognition-on-pittsburgh-250k?p=rethinking-visual-geo-localization-for-large)[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-pittsburgh-30k)](https://paperswithcode.com/sota/visual-place-recognition-on-pittsburgh-30k?p=rethinking-visual-geo-localization-for-large)
