@@ -18,8 +18,8 @@ def open_image(path):
 
 
 class TrainDataset(torch.utils.data.Dataset):
-    def __init__(self, args, dataset_folder, M=10, alpha=30, N=5, L=2,
-                 current_group=0, min_images_per_class=10):
+    def __init__(self, args, dataset_folder, is_aug, M=10, alpha=30, N=5, L=2,
+                 current_group=0, min_images_per_class=10,):
         """
         Parameters (please check our paper for a clearer explanation of the parameters).
         ----------
@@ -40,7 +40,7 @@ class TrainDataset(torch.utils.data.Dataset):
         self.current_group = current_group
         self.dataset_folder = dataset_folder
         self.augmentation_device = args.augmentation_device
-        
+        self.is_aug = is_aug
         filename = f"cache/sf_xl_M{M}_N{N}_mipc{min_images_per_class}.torch"
         if not os.path.exists(filename):
             os.makedirs("cache", exist_ok=True)
@@ -56,6 +56,10 @@ class TrainDataset(torch.utils.data.Dataset):
                              "You should reduce the number of groups in --groups_num")
         self.classes_ids = classes_per_group[current_group]
         
+        if is_aug:
+            pil_logger = logging.getLogger('PIL')
+            pil_logger.setLevel(logging.INFO)
+            
         if self.augmentation_device == "cpu":
             self.transform = T.Compose([
                     T.ColorJitter(brightness=args.brightness,
@@ -77,6 +81,9 @@ class TrainDataset(torch.utils.data.Dataset):
         
         try:
             pil_image = open_image(image_path)
+            if self.is_aug:
+                if np.array(pil_image).shape[0] != 512:
+                    T.Resize((512,512))(pil_image)
         except Exception as e:
             logging.info(f"ERROR image {image_path} couldn't be opened, it might be corrupted.")
             raise e
