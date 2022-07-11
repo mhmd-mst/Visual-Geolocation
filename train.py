@@ -45,7 +45,7 @@ criterion = torch.nn.CrossEntropyLoss()
 model_optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
 #### Datasets
-groups = [TrainDataset(args, args.train_set_folder, M=args.M, alpha=args.alpha, N=args.N, L=args.L,
+groups = [TrainDataset(args, args.train_set_folder, args.is_aug, M=args.M, alpha=args.alpha, N=args.N, L=args.L,
                        current_group=n, min_images_per_class=args.min_images_per_class) for n in range(args.groups_num)]
 # Each group has its own classifier, which depends on the number of classes in the group
 classifiers = [cosface_loss.MarginCosineProduct(args.fc_output_dim, len(group)) for group in groups]
@@ -177,20 +177,36 @@ logging.info(f"Trained for {epoch_num + 1:02d} epochs, in total in {str(datetime
 best_model_state_dict = torch.load(f"{output_folder}/best_model.pth")
 model.load_state_dict(best_model_state_dict)
 
-logging.info(f"Now testing on the test set: {test_ds}")
-recalls, recalls_str = test.test(args, test_ds, model)
-logging.info(f"{test_ds}: {recalls_str[:20]}")
+if args.is_aug:
+    logging.info(f"Now testing on the test set: {test_ds}")
+    recalls, recalls_str = test.test(args, test_ds, model)
+    logging.info(f"{test_ds}: {recalls_str[:20]}")
 
-logging.info(f"Now testing on the test set: {test_ds_tokyo}")
-recalls1, recalls_str1 = test.test(args, test_ds_tokyo, model)
-logging.info(f"{test_ds_tokyo}: {recalls_str1[:20]}")
+    logging.info(f"Now testing on the test set: {test_ds_tokyo}")
+    recalls1, recalls_str1 = test.test(args, test_ds_tokyo, model)
+    logging.info(f"{test_ds_tokyo}: {recalls_str1[:20]}")
 
-logging.info(f"Now testing on the test set: {test_ds_tokyo_night}")
-recalls2, recalls_str2 = test.test(args, test_ds_tokyo_night, model)
-logging.info(f"{test_ds_tokyo_night}: {recalls_str2[:20]}")
+    logging.info(f"Now testing on the test set: {test_ds_tokyo_night}")
+    recalls2, recalls_str2 = test.test(args, test_ds_tokyo_night, model)
+    logging.info(f"{test_ds_tokyo_night}: {recalls_str2[:20]}")
+else:
+    logging.info(f"Now testing netvlad-patch postprocesing on the sf val set: {val_ds}")
+    recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, val_ds, model)
+    logging.info(f"{val_ds} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
+
+    logging.info(f"Now testing netvlad-patch postprocesing on the sf test set: {test_ds}")
+    recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds, model)
+    logging.info(f"{test_ds} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
+
+    logging.info(f"Now testing netvlad-patch postprocesing on the tokyo small: {test_ds_tokyo}")
+    recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds_tokyo, model)
+    logging.info(f"{test_ds_tokyo} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
+
+    logging.info(f"Now testing netvlad-patch postprocesing on the tokyo night set: {test_ds_tokyo_night}")
+    recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds_tokyo_night, model)
+    logging.info(f"{test_ds_tokyo_night} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
+
 
 logging.info("Experiment finished (without any errors)")
 
-print("my recall is:", recalls)
-print("my recall is:", recalls1)
-print("my recall is:", recalls2)
+
