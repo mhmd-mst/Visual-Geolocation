@@ -18,7 +18,7 @@ def open_image(path):
 
 
 class TrainDataset(torch.utils.data.Dataset):
-    def __init__(self, args, dataset_folder, is_aug, M=10, alpha=30, N=5, L=2,
+    def __init__(self, args, dataset_folder, is_aug=False, M=10, alpha=30, N=5, L=2,
                  current_group=0, min_images_per_class=10,):
         """
         Parameters (please check our paper for a clearer explanation of the parameters).
