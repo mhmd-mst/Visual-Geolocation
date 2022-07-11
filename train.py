@@ -15,13 +15,14 @@ import parser
 import commons
 import cosface_loss
 import augmentations
-from model import network
+from model.network import GeoLocalizationNet
 from datasets.test_dataset import TestDataset
 from datasets.train_dataset import TrainDataset
 
 args = parser.parse_arguments()
 start_time = datetime.now()
 output_folder = f"logs/{args.save_dir}/{start_time.strftime('%Y-%m-%d_%H-%M-%S')}"
+# output_folder = f"/content/drive/MyDrive/{start_time.strftime('%Y-%m-%d_%H-%M-%S')}"
 commons.make_deterministic(args.seed)
 commons.setup_logging(output_folder, console="debug")
 logging.info(" ".join(sys.argv))
@@ -29,7 +30,7 @@ logging.info(f"Arguments: {args}")
 logging.info(f"The outputs are being saved in {output_folder}")
 
 #### Model
-model = network.GeoLocalizationNet(args.backbone, args.fc_output_dim)
+model = GeoLocalizationNet(args.backbone, args.fc_output_dim)
 
 logging.info(f"There are {torch.cuda.device_count()} GPUs and {multiprocessing.cpu_count()} CPUs.")
 
@@ -45,7 +46,7 @@ criterion = torch.nn.CrossEntropyLoss()
 model_optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
 #### Datasets
-groups = [TrainDataset(args, args.train_set_folder, args.is_aug, M=args.M, alpha=args.alpha, N=args.N, L=args.L,
+groups = [TrainDataset(args, args.train_set_folder,is_aug=args.is_aug, M=args.M, alpha=args.alpha, N=args.N, L=args.L,
                        current_group=n, min_images_per_class=args.min_images_per_class) for n in range(args.groups_num)]
 # Each group has its own classifier, which depends on the number of classes in the group
 classifiers = [cosface_loss.MarginCosineProduct(args.fc_output_dim, len(group)) for group in groups]
@@ -60,10 +61,8 @@ logging.info(
 val_ds = TestDataset(args.val_set_folder, positive_dist_threshold=args.positive_dist_threshold)
 test_ds = TestDataset(args.test_set_folder, queries_folder="queries_v1",
                       positive_dist_threshold=args.positive_dist_threshold)
-test_ds_tokyo = TestDataset("/content/drive/MyDrive/tokyo_xs/test/",
-                            positive_dist_threshold=args.positive_dist_threshold)
-test_ds_tokyo_night = TestDataset("/content/drive/MyDrive/tokyo_night/test/",
-                                  positive_dist_threshold=args.positive_dist_threshold)
+test_ds_tokyo = TestDataset("/content/tokyo_xs/test/", positive_dist_threshold=args.positive_dist_threshold)
+test_ds_tokyo_night = TestDataset("/content/tokyo_night/test/", positive_dist_threshold=args.positive_dist_threshold)
 
 logging.info(f"Validation set: {val_ds}")
 logging.info(f"Test set: {test_ds}")
@@ -130,7 +129,8 @@ for epoch_num in range(start_epoch_num, args.epochs_num):
         classifiers_optimizers[current_group_num].zero_grad()
 
         if not args.use_amp16:
-            descriptors = model(images)
+            descriptors = model.embedd(images)
+            descriptors = model.global_pool(descriptors)
             output = classifiers[current_group_num](descriptors, targets)
             loss = criterion(output, targets)
             loss.backward()
@@ -140,7 +140,8 @@ for epoch_num in range(start_epoch_num, args.epochs_num):
             classifiers_optimizers[current_group_num].step()
         else:  # Use AMP 16
             with torch.cuda.amp.autocast():
-                descriptors = model(images)
+                descriptors = model.embedd(images)
+                descriptors = model.global_pool(descriptors)
                 output = classifiers[current_group_num](descriptors, targets)
                 loss = criterion(output, targets)
             scaler.scale(loss).backward()
@@ -162,6 +163,7 @@ for epoch_num in range(start_epoch_num, args.epochs_num):
         f"Epoch {epoch_num:02d} in {str(datetime.now() - epoch_start_time)[:-7]}, {val_ds}: {recalls_str[:20]}")
     is_best = recalls[0] > best_val_recall1
     best_val_recall1 = max(recalls[0], best_val_recall1)
+
     # Save checkpoint, which contains all training parameters
     util.save_checkpoint({"epoch_num": epoch_num + 1,
                           "model_state_dict": model.state_dict(),
@@ -176,37 +178,33 @@ logging.info(f"Trained for {epoch_num + 1:02d} epochs, in total in {str(datetime
 #### Test best model on test set v1
 best_model_state_dict = torch.load(f"{output_folder}/best_model.pth")
 model.load_state_dict(best_model_state_dict)
-
 if args.is_aug:
     logging.info(f"Now testing on the test set: {test_ds}")
     recalls, recalls_str = test.test(args, test_ds, model)
     logging.info(f"{test_ds}: {recalls_str[:20]}")
 
     logging.info(f"Now testing on the test set: {test_ds_tokyo}")
-    recalls1, recalls_str1 = test.test(args, test_ds_tokyo, model)
-    logging.info(f"{test_ds_tokyo}: {recalls_str1[:20]}")
+    recalls, recalls_str = test.test(args, test_ds_tokyo, model)
+    logging.info(f"{test_ds_tokyo}: {recalls_str[:20]}")
 
     logging.info(f"Now testing on the test set: {test_ds_tokyo_night}")
-    recalls2, recalls_str2 = test.test(args, test_ds_tokyo_night, model)
-    logging.info(f"{test_ds_tokyo_night}: {recalls_str2[:20]}")
+    recalls, recalls_str = test.test(args, test_ds_tokyo_night, model)
+    logging.info(f"{test_ds_tokyo_night}: {recalls_str[:20]}")
 else:
-    logging.info(f"Now testing netvlad-patch postprocesing on the sf val set: {val_ds}")
+    logging.info(f"Now testing netvlad-patch postprocesing on sf val set: {val_ds}")
     recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, val_ds, model)
     logging.info(f"{val_ds} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
 
-    logging.info(f"Now testing netvlad-patch postprocesing on the sf test set: {test_ds}")
+    logging.info(f"Now testing netvlad-patch postprocesing on sf test set: {test_ds}")
     recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds, model)
     logging.info(f"{test_ds} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
 
-    logging.info(f"Now testing netvlad-patch postprocesing on the tokyo small: {test_ds_tokyo}")
+    logging.info(f"Now testing netvlad-patch postprocesing on tokyo small set: {test_ds_tokyo}")
     recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds_tokyo, model)
     logging.info(f"{test_ds_tokyo} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
 
-    logging.info(f"Now testing netvlad-patch postprocesing on the tokyo night set: {test_ds_tokyo_night}")
+    logging.info(f"Now testing netvlad-patch postprocesing on tokyo night set: {test_ds_tokyo_night}")
     recalls, recalls_str, patch_refined_recalls, patch_refined_recalls_str = test.test_with_postprocessing(args, test_ds_tokyo_night, model)
     logging.info(f"{test_ds_tokyo_night} plain: {recalls_str[:20]} patch-refined: {patch_refined_recalls_str[:20]}")
-
-
-logging.info("Experiment finished (without any errors)")
 
 
