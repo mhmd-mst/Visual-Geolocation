@@ -46,9 +46,6 @@ def test(args, eval_ds, model, rerank=False):
     logging.debug("Calculating recalls")
     _, predictions = faiss_index.search(queries_descriptors, max(args.recall_values))
 
-    # Re-Ranking
-    if rerank:
-        predictions = reranking(predictions, eval_ds)
 
     #### For each query, check if the predictions are correct
     positives_per_query = eval_ds.get_positives()
@@ -63,47 +60,6 @@ def test(args, eval_ds, model, rerank=False):
     recalls = recalls / eval_ds.queries_num * 100
     recalls_str = ", ".join([f"R@{val}: {rec:.1f}" for val, rec in zip(args.recall_values, recalls)])
     return recalls, recalls_str
-
-
-def reranking(predictions, eval_ds):
-    reranked_preds = list()
-    for preds in predictions:
-        database = list()
-        for idx in preds:
-            database.append(eval_ds.database_utms[idx])
-        knn_re = NearestNeighbors(n_jobs=-1)
-        knn_re.fit(database)
-        tmp = knn_re.radius_neighbors(database, radius=5, return_distance=False)
-        for z in range(len(tmp)):
-            tmp[z] = tmp[z].tolist()
-        out = []
-        while len(tmp) > 0:
-            first, *rest = tmp
-            first = set(first)
-
-            lf = -1
-            while len(first) > lf:
-                lf = len(first)
-
-                rest2 = []
-                for r in rest:
-                    if len(first.intersection(set(r))) > 0:
-                        first |= set(r)
-                    else:
-                        rest2.append(r)
-                rest = rest2
-
-            out.append(list(first))
-            tmp = rest
-
-        out.sort(key=len, reverse=True)
-        cluster_list = out.copy()
-        for i in range(len(out)):
-            for j in range(len(out[i])):
-                cluster_list[i][j] = preds[out[i][j]]
-        l = cluster_list.copy()
-        reranked_preds.append(sum(l, []))
-    return reranked_preds
 
 
 if __name__ == '__main__':
