@@ -1,5 +1,8 @@
 
+## Train with augmented dataset
 
+If you want to apply augmentation to the datasets with translation models refer `image-to-image translation/README.md` and after augmenting run
+`$ python3 train.py --is_aug --dataset_folder path/to/sf-xs/processed`
 
 ## Train
 After downloading the SF-xs dataset, simply run 
@@ -9,8 +12,6 @@ After downloading the SF-xs dataset, simply run
 the script automatically splits SF-XS in CosPlace Groups, and saves the resulting object in the folder `cache`.
 By default training is performed with a ResNet-18 with descriptors dimensionality 512 is used, which fits in less than 4GB of VRAM.
 
-If you want to apply augmentation to the datasets with translation models refer `image-to-image translation/README.md` and after augmenting run
-`$ python3 train.py --is_aug --dataset_folder path/to/sf-xs/processed`
 
 To change the backbone or the output descriptors dimensionality simply run 
 
