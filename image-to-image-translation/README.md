@@ -52,7 +52,7 @@ $ python test.py --dataroot ./datasets/ --name day2night --num_test <nb of sampl
 ```
 
 ### <div align="center">Augment SF-train</div>
-	To apply the augmentation use `pix2pix` [TO DO]
+To apply the augmentation run colab `pix2pix.ipynb`
 	
 
 </details>
@@ -117,7 +117,7 @@ $ python test.py --phase test --dataroot ./datasets/ --n_samples 1 --num_test <n
 ```
 
 ### <div align="center">Augment SF-train</div>
-	To apply the augmentation use `Bicycle` [TO DO]
+To apply the augmentation run colab `BicycleGAN.ipynb`
 	
 
 </details>
@@ -156,7 +156,7 @@ $ python test.py --phase test --serial_test --name day2night --dataroot ./datase
 ```
 
 ### <div align="center">Augment SF-train</div>
-	To apply the augmentation use `Bicycle` [TO DO]
+To apply the augmentation run colab `ToDayGAN.ipynb`
 	
 
 </details>
