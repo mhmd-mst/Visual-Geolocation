@@ -1,5 +1,9 @@
 # Synthetic Images as Data Augmentation
 
+Sample of images produced from sf-xs using translation models.
+
+<img src="sample.png" width="600" height="400">
+
 The results of VG using different translation models compared to Cosplace baseline.
 
 | Dataset  | Cosplace | pix2pix aug R@1 | BicycleGAN aug R@1 | ToDayGAN R@1 |
