@@ -6,7 +6,7 @@ import argparse
 def parse_arguments():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # image-to-image translation
-    perser.add_argument("--is_aug", action="store_true", help="if augmentation is applied using the translation models")
+    parser.add_argument("--is_aug", action="store_true", help="if augmentation is applied using the translation models")
     # CosPlace Groups parameters
     parser.add_argument("--M", type=int, default=10, help="_")
     parser.add_argument("--alpha", type=int, default=30, help="_")
