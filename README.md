@@ -35,18 +35,3 @@ You can download plenty of trained models below.
 ## SF-N Dataset
 You can download the SF-N dataset using this [link](https://drive.google.com/file/d/1GUA4VVxh389i_FTJ-caVHHx8alr1hmg3/view?usp=sharing). 
 
-
-## Cite
-Here is the bibtex to cite our paper
-```
-@inProceedings{Berton_CVPR_2022_cosPlace,
-  author = {Berton, Gabriele and Masone, Carlo and Caputo, Barbara},
-  title = {Rethinking Visual Geo-localization for Large-Scale Applications}, 
-  booktitle = {CVPR},
-  month = {June}, 
-  year = {2022}, }
-```
-
-## Issues
-If you find some problems in our code, or have any advice or questions, feel free to open an issue or send an email to berton.gabri@gmail.com
-
