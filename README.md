@@ -1,36 +1,16 @@
 
 
-# Rethinking Visual Geo-localization for Large-Scale Applications
-
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-pittsburgh-250k)](https://paperswithcode.com/sota/visual-place-recognition-on-pittsburgh-250k?p=rethinking-visual-geo-localization-for-large)[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-pittsburgh-30k)](https://paperswithcode.com/sota/visual-place-recognition-on-pittsburgh-30k?p=rethinking-visual-geo-localization-for-large)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-tokyo247)](https://paperswithcode.com/sota/visual-place-recognition-on-tokyo247?p=rethinking-visual-geo-localization-for-large)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-mapillary-val)](https://paperswithcode.com/sota/visual-place-recognition-on-mapillary-val?p=rethinking-visual-geo-localization-for-large)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-st-lucia)](https://paperswithcode.com/sota/visual-place-recognition-on-st-lucia?p=rethinking-visual-geo-localization-for-large)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-sf-xl-test-v1)](https://paperswithcode.com/sota/visual-place-recognition-on-sf-xl-test-v1?p=rethinking-visual-geo-localization-for-large)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-visual-geo-localization-for-large/visual-place-recognition-on-sf-xl-test-v2)](https://paperswithcode.com/sota/visual-place-recognition-on-sf-xl-test-v2?p=rethinking-visual-geo-localization-for-large)
-
-This is the official repository for the CVPR 2022 paper [Rethinking Visual Geo-localization for Large-Scale Applications](https://arxiv.org/abs/2204.02287).
-The paper presents a new dataset called San Francisco eXtra Large (SF-XL, go [_here_](https://forms.gle/wpyDzhDyoWLQygAT9) to download it), and a highly scalable training method (called CosPlace), which allows to reach SOTA results with compact descriptors.
-
-The images below represent respectively:
-1) the map of San Francisco eXtra Large
-2) a visualization of how CosPlace Groups (read datasets) are formed
-3) results with CosPlace vs other methods on Pitts250k (CosPlace trained on SF-XL, others on Pitts30k)
-<p float="left">
-  <img src="https://github.com/gmberton/gmberton.github.io/blob/main/images/SF-XL%20map.jpg" height="200" />
-  <img src="https://github.com/gmberton/gmberton.github.io/blob/main/images/map_groups.png" height="200" /> 
-  <img src="https://github.com/gmberton/gmberton.github.io/blob/main/images/backbones_pitts250k_main.png" height="200" />
-</p>
-
-
 
 ## Train
-After downloading the SF-XL dataset, simply run 
+After downloading the SF-xs dataset, simply run 
 
 `$ python3 train.py --dataset_folder path/to/sf-xl/processed`
 
 the script automatically splits SF-XL in CosPlace Groups, and saves the resulting object in the folder `cache`.
 By default training is performed with a ResNet-18 with descriptors dimensionality 512 is used, which fits in less than 4GB of VRAM.
+
+If you want to apply augmentation to the datasets with translation models refer `image-to-image translation/README.md` and after augmenting run
+`$ python3 train.py --is_aug --dataset_folder path/to/sf-xl/processed`
 
 To change the backbone or the output descriptors dimensionality simply run 
 
