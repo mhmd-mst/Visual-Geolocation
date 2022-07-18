@@ -2,6 +2,7 @@
 ## Train with augmented dataset
 
 If you want to apply augmentation to the datasets with translation models refer `image-to-image translation/README.md` and after augmenting run
+
 `$ python3 train.py --is_aug --dataset_folder path/to/sf-xs/processed`
 
 ## Train
